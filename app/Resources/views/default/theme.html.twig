@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+{% block bouton1 %}
+    <a class="btn btn-default" href="{{ path('homepage') }}">Forum</a>
+{% endblock %}
+{% block body %}
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('homepage') }}">Liste des thèmes</a>
+        </li>
+    </ol>
+
+    {% if theme is defined %}
+        <h1>{{ theme.name }}</h1>
+    {% elseif title is defined %}
+        <h1>{{ title }}</h1>
+    {% endif %}
+
+    <table class="table">
+        <tbody>
+        {% for post in postList %}
+            <tr>
+                <td>
+                    <a href="{{ path('post_details', {'slug': post.slug}) }}">
+                        {{ post.title }}
+                    </a>
+                </td>
+                <td>{{ post.answers | length }} réponses</td>
+                <td>
+                    {% if is_granted('ROLE_AUTHOR') %}
+                        {% if app.user.id == post.author.id %}
+                            <a href="{{ path('post_edit', {'slug' : post.slug}) }}" class="btn btn-xs btn-warning">Mofifier</a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    {% if themeParAnnee is not defined %}
+        {% if is_granted('ROLE_AUTHOR') %}
+            <a href="{{ path('post_new', {'slug' : theme.slug}) }}" class="btn btn-lg btn-success">Nouveau post</a>
+            <br>
+            {% if titreCreation is defined %}
+                <h1>{{ titreCreation }}</h1>
+                {{ form(postForm) }}
+            {% elseif titreModif is defined %}
+                <h1>{{ titreModif }}</h1>
+                {{ form(postForm) }}
+            {% endif %}
+
+
+        {% endif %}
+    {% endif %}
+{% endblock %}
+

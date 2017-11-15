@@ -1,0 +1,91 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('homepage') }}">Liste des thèmes</a>
+        </li>
+        <li><a href="{{ path('theme_details', {'slug': post.theme.slug}) }}">
+                {{ post.theme.name }}
+            </a>
+        </li>
+
+    </ol>
+
+    <h1>{{ post.title }}</h1>
+
+    <p>par {{ post.author.email }} il y a {{ post.createdAt | elapsed }} </p>
+
+    {% if post.imageFileName %}
+        <img src="{{ asset('uploadedFiles/' ~ post.imageFileName) }}" class="img-responsive img-circle"
+             style="width: 200px">
+    {% endif %}
+    <p>{{ post.text | purify }}</p>
+
+    <hr>
+    <h2>Les réponses ({{ post.answers | length }})</h2>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <h3 class="text-center">
+                {% if is_granted('ROLE_AUTHOR') %}
+                    {% if newAnswerForm is defined %}
+                        <h3>{{ titreAnswer }}</h3>
+                        {{ form(newAnswerForm) }}
+                    {% elseif editAnswerForm is defined %}
+                        <h3>{{ titreAnswer }}</h3>
+                        {{ form(editAnswerForm) }}
+                    {% else %}
+                        <a href="{{ path('answer_new', {'slug' : post.slug}) }}"
+                           class="btn btn-lg btn-success"><i class="fa fa-reply" aria-hidden="true">  Répondre</i></a>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ path('author_login') }}"
+                       class="btn btn-lg btn-default">Veuillez vous connectez pour pouvoir répondre</a>
+                {% endif %}
+            </h3>
+            <hr>
+            <br>
+        </div>
+    </div>
+    <div class="row">
+        {% if messageVote is defined %}
+            <div class="col-md-6 col-md-offset-3 alert alert-info">
+                {{ messageVote }}
+            </div>
+        {% endif %}
+    </div>
+    {% for answer in answerList %}
+
+
+        <div class="row">
+            <div class="col-xs-1" style="text-align: center">
+                <div><a href="{{ path('vote_plus',{'id' : answer.id, 'voteUser': 1 }) }}"><i
+                                class="fa fa-2x fa-sort-asc" aria-hidden="true"></i></a></div>
+                <p>{{ answer.score }}</p>
+                <div>
+                    <div><a href="{{ path('vote_plus',{'id' : answer.id, 'voteUser': -1 }) }}"><i
+                                    class="fa fa-2x fa-sort-down" aria-hidden="true"></i></a></div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-lg-offset-1">
+                <p>Par {{ answer.auteurPrenom }} {{ answer.auteurNom }}, il y a {{ answer.createdAt | elapsed }}
+                    {% if is_granted('ROLE_AUTHOR') %}
+                        {% if app.user.id == answer.auteurId %}
+                            <a href="{{ path('answer_edit', {'id' : answer.id }) }}"
+                               class="btn btn-xs btn-default"><i class="fa fa-pencil" aria-hidden="true">  édit</i></a>
+                        {% endif %}
+                    {% endif %}
+                </p>
+                <p>{{ answer.text | purify }}</p>
+            </div>
+        </div>
+        <hr>
+    {% endfor %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+
+{% endblock %}

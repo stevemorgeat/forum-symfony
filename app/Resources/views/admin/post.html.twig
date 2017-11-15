@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}
+{% block bouton1 %}
+    <a class="btn btn-default" href="{{  path('homepage') }}">Forum</a>
+{% endblock %}
+{% block body %}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('admin_themes') }}">Liste des thèmes</a>
+        </li>
+    </ol>
+    <br>
+    <h2>Nouveau post</h2>
+    {{ form(postForm) }}
+    <h2>Liste des posts</h2>
+
+    <ul>
+        {% for post in postList %}
+            <li>{{ post.title }}</li>
+        {% endfor %}
+
+    </ul>
+
+    <br>
+    <br>
+    <br>
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('bundles/ivoryckeditor/ckeditor.js') }}"></script>
+{% endblock %}

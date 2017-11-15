@@ -1,0 +1,23 @@
+# This file is auto-generated during the composer install
+#parameters:
+#    database_host: 127.0.0.1
+#    database_port: null
+#    database_name: forumCorrection
+#    database_user: root
+#    database_password: null
+#    mailer_transport: smtp
+#    mailer_host: 127.0.0.1
+#    mailer_user: null
+#    mailer_password: null
+#    secret: 'que j''aime les kinder bueno'
+parameters:
+    database_host: mysql-morgeatsteve.alwaysdata.net
+    database_port: null
+    database_name: morgeatsteve_forum
+    database_user: 141590
+    database_password: M2iformation,
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: 'que j''aime les kinder bueno'
